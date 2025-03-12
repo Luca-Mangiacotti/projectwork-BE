@@ -3,7 +3,7 @@ const connection = require("../data/db");
 
 //INDEX
 const index = (req, res) => {
-  const sql = "SELECT * FROM movies";
+  const sql = "SELECT * FROM products";
 
   //mandiamo la query
   connection.execute(sql, (err, results) => {
@@ -14,9 +14,9 @@ const index = (req, res) => {
       });
     }
 
-    const movies = results.map((movie) => {
-      movie.image = `${process.env.BE_URL}/images/${movie.image}`;
-      return movie;
+    const products = results.map((product) => {
+      product.image = `${process.env.BE_URL}/images/${product.image}`;
+      return product;
     });
 
     res.json(results);
@@ -24,42 +24,42 @@ const index = (req, res) => {
 };
 
 //SHOW
-const show = (req, res) => {
+const show = ({ params }, res) => {
   //recuperiamo l'id
-  const { id } = req.params;
+  const { id } = params;
 
-  const movieSql = `
+  const productSql = `
       SELECT * 
-      FROM movies
+      FROM products
       WHERE id = ?`;
 
   //mandiamo la query che comprende il parametro [id] per il contenuto richiesto
-  connection.execute(movieSql, [id], (err, results) => {
+  connection.execute(productSql, [id], (err, results) => {
     if (err) {
       return res.status(500).json({
         error: "Query Error",
-        message: `Database query failed: ${movieSql}`,
+        message: `Database query failed: ${productSql}`,
       });
     }
 
     //salviamo in una variabile il contenuto richiesto
-    const movie = results[0];
+    const product = results[0];
 
-    if (!movie) {
+    if (!product) {
       return res.status(404).json({
         error: "Not found",
-        message: "MOVIE not found",
+        message: "product not found",
       });
     }
 
     //aggiungiamo il percorso dell'immagine
-    movie.image = `${process.env.BE_URL}/images/${movie.image}`;
+    product.image = `${process.env.BE_URL}/images/${product.image}`;
 
     //query per recuperare le recensioni dell'elemento film
     const reviewsSql = `
     SELECT reviews.name, reviews.vote, reviews.text, reviews.updated_at 
     FROM reviews
-    WHERE movie_id = ?`;
+    WHERE product_id = ?`;
 
     connection.execute(reviewsSql, [id], (err, results) => {
       if (err) {
@@ -69,10 +69,10 @@ const show = (req, res) => {
         });
       }
 
-      movie.reviews = results;
-      res.json(movie);
+      product.reviews = results;
+      res.json(product);
     });
   });
 };
 
-module.exports = { index, show, storeReview };
+module.exports = { index, show };
