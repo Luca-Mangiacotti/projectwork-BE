@@ -22,7 +22,7 @@ app.use(
 );
 
 //Routes
-app.use("/", routers);
+app.use("/yuno", routers);
 
 //gestione degli errori
 app.use(notFound);

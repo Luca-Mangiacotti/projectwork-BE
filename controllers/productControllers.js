@@ -53,25 +53,8 @@ const show = ({ params }, res) => {
     }
 
     //aggiungiamo il percorso dell'immagine
-    product.image = `${process.env.BE_URL}/images/${product.image}`;
-
-    //query per recuperare le recensioni dell'elemento film
-    const reviewsSql = `
-    SELECT reviews.name, reviews.vote, reviews.text, reviews.updated_at 
-    FROM reviews
-    WHERE product_id = ?`;
-
-    connection.execute(reviewsSql, [id], (err, results) => {
-      if (err) {
-        return res.status(500).json({
-          error: "Query Error",
-          message: `Database query failed: ${reviewsSql}`,
-        });
-      }
-
-      product.reviews = results;
-      res.json(product);
-    });
+    product.image = `${process.env.BE_URL}/images/${product.image}.jpg`;
+    res.json(product);
   });
 };
 
