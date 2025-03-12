@@ -4,6 +4,7 @@ const cors = require("cors");
 //Errors Handlers
 const notFound = require("./middlewares/notFound");
 const errorsHandler = require("./middlewares/errorsHandler");
+const routers = require("./routers/productRouters");
 
 const app = express();
 const { PORT, FE_URL } = process.env;
@@ -21,7 +22,7 @@ app.use(
 );
 
 //Routes
-app.use();
+app.use("/", routers);
 
 //gestione degli errori
 app.use(notFound);
