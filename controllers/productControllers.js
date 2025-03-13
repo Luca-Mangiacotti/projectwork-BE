@@ -1,6 +1,27 @@
 //connettiamo il database
 const connection = require("../data/db");
 
+/* const discounted = (req, res) => {
+  const sql = "SELECT id, discount FROM products";
+
+  //mandiamo la query
+  connection.execute(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        error: "Query Error",
+        message: `Database query failed: ${sql}`,
+      });
+    }
+
+    const products = results.map((product) => {
+      product.image = `${process.env.BE_URL}/images/${product.image}`;
+      return product;
+    });
+
+    res.json(results);
+  });
+};
+ */
 //INDEX
 const index = (req, res) => {
   const sql = "SELECT * FROM products";
@@ -68,7 +89,7 @@ const showByTag = ({ params }, res) => {
       FROM product_tag
       JOIN products ON products.id = product_id
       JOIN tag ON tag_id = tag.id
-      WHERE tag_id = ?`;
+      WHERE tag_name = ?`;
 
   //mandiamo la query che comprende il parametro [id] per il contenuto richiesto
   connection.execute(tagSql, [tag_id], (err, results) => {
