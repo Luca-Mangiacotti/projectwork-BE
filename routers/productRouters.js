@@ -10,7 +10,10 @@ router.get("/", productController.index);
 //Show
 router.get("/:id", productController.show);
 
+//Show By Correlated
+router.get("/correlated", productController.showByCorrelated);
+
 //Show By Tag
-router.get("/brand/:tag_id", productController.showByTag);
+router.get("/brand/:tag_name", productController.showByTag);
 
 module.exports = router;

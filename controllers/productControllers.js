@@ -82,7 +82,7 @@ const show = ({ params }, res) => {
 //SHOW BY TAG
 const showByTag = ({ params }, res) => {
   //recuperiamo l'id
-  const { tag_id } = params; // ----------------------------------------------------------------< quando pronto al FE
+  const { tag_name } = params; // ----------------------------------------------------------------< quando pronto al FE
 
   const tagSql = `
       SELECT tag_name, products.*
@@ -92,7 +92,7 @@ const showByTag = ({ params }, res) => {
       WHERE tag_name = ?`;
 
   //mandiamo la query che comprende il parametro [id] per il contenuto richiesto
-  connection.execute(tagSql, [tag_id], (err, results) => {
+  connection.execute(tagSql, [tag_name], (err, results) => {
     if (err) {
       return res.status(500).json({
         error: "Query Error",
@@ -114,4 +114,49 @@ const showByTag = ({ params }, res) => {
   });
 };
 
-module.exports = { index, show, showByTag };
+const showByCorrelated = (req, res) => {
+  //recuperiamo l'id
+  const { ram, cpu, gpu } = req.query; // ----------------------------------------------------------------< quando pronto al FE
+
+  const parametri = [];
+  let correlatedSql = `
+      SELECT *
+      FROM products
+      WHERE 1 = 1`;
+  if (ram) {
+    correlatedSql += " AND ram = ?";
+    parametri.push(Number(req.query.ram));
+  }
+  if (gpu) {
+    correlatedSql += " AND gpu LIKE ?";
+    parametri.push(`%${req.query.gpu}%`);
+  }
+  if (cpu) {
+    correlatedSql += " AND cpu LIKE ?";
+    parametri.push(`%${req.query.cpu}%`);
+  }
+
+  //mandiamo la query che comprende il parametro [] per il contenuto richiesto
+  connection.execute(correlatedSql, parametri, (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        error: "Query Error",
+        message: `Database query failed: ${correlatedSql}`,
+      });
+    }
+
+    //salviamo in una variabile il contenuto richiesto
+    const correlatedList = results;
+
+    if (!correlatedList) {
+      return res.status(404).json({
+        error: "Not found",
+        message: "Correlated list not found",
+      });
+    }
+
+    res.json(correlatedList);
+  });
+};
+
+module.exports = { index, show, showByTag, showByCorrelated };
