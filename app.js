@@ -4,7 +4,8 @@ const cors = require("cors");
 //Errors Handlers
 const notFound = require("./middlewares/notFound");
 const errorsHandler = require("./middlewares/errorsHandler");
-const routers = require("./routers/productRouters");
+const productRouters = require("./routers/productRouters");
+const userRouters = require("./routers/userRouters");
 
 const app = express();
 const { PORT, FE_URL } = process.env;
@@ -22,7 +23,8 @@ app.use(
 );
 
 //Routes
-app.use("/yuno", routers);
+app.use("/yuno", productRouters);
+app.use("/user", userRouters);
 
 //gestione degli errori
 app.use(notFound);
