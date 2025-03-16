@@ -7,13 +7,16 @@ const productController = require("../controllers/productControllers");
 //Index
 router.get("/", productController.index);
 
-//Show
-router.get("/:id", productController.show);
+//Search by title
+router.get("/search", productController.searchByTitle);
 
 //Show By Correlated
 router.get("/correlated", productController.showByCorrelated);
 
 //Show By Tag
 router.get("/brand/:tag_name", productController.showByTag);
+
+//Show
+router.get("/:id", productController.show);
 
 module.exports = router;
