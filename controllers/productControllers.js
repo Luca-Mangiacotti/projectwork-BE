@@ -114,6 +114,7 @@ const showByTag = ({ params }, res) => {
   });
 };
 
+// SHOW BY CORRELATED
 const showByCorrelated = (req, res) => {
   //recuperiamo l'id
   const { ram, cpu, gpu } = req.query; // ----------------------------------------------------------------< quando pronto al FE
@@ -159,4 +160,45 @@ const showByCorrelated = (req, res) => {
   });
 };
 
-module.exports = { index, show, showByTag, showByCorrelated };
+//SEARCH BY TITLE
+const searchByTitle = (req, res) => {
+  const { title } = req.query;
+
+  if (!title) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "Title parameter is required",
+    });
+  }
+
+  const searchSql = `
+    SELECT *
+    FROM products 
+    WHERE title LIKE ?
+  `;
+
+  connection.execute(searchSql, [`%${title}%`], (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        error: "Query Error",
+        message: `Database query failed: ${searchSql}`,
+      });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({
+        error: "Not found",
+        message: "No products found with this title",
+      });
+    }
+
+    const products = results.map((product) => {
+      product.image = `${process.env.BE_URL}/images/${product.image}`;
+      return product;
+    });
+
+    res.json(products);
+  });
+};
+
+module.exports = { index, show, showByTag, showByCorrelated, searchByTitle };
