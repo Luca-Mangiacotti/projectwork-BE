@@ -46,16 +46,15 @@ const index = (req, res) => {
 
 //SHOW
 const show = ({ params }, res) => {
-  //recuperiamo l'id
-  const { id } = params;
-
+  //recuperiamo il titolo
+  const { title } = params;
   const productSql = `
       SELECT * 
       FROM products
-      WHERE id = ?`;
+      WHERE title LIKE ?`;
 
-  //mandiamo la query che comprende il parametro [id] per il contenuto richiesto
-  connection.execute(productSql, [id], (err, results) => {
+  //mandiamo la query che comprende il parametro [title] per il contenuto richiesto
+  connection.execute(productSql, [title], (err, results) => {
     if (err) {
       return res.status(500).json({
         error: "Query Error",
