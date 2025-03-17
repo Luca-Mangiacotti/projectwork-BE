@@ -156,6 +156,11 @@ const showByCorrelated = (req, res) => {
       });
     }
 
+    const products = results.map((product) => {
+      product.image = `${process.env.BE_URL}/images/${product.image}`;
+      return product;
+    });
+
     res.json(correlatedList);
   });
 };
