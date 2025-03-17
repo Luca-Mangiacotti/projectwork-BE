@@ -17,6 +17,6 @@ router.get("/correlated", productController.showByCorrelated);
 router.get("/brand/:tag_name", productController.showByTag);
 
 //Show
-router.get("/:id", productController.show);
+router.get("/:title", productController.show);
 
 module.exports = router;
