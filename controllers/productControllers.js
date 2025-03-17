@@ -125,8 +125,8 @@ const showByCorrelated = (req, res) => {
       FROM products
       WHERE 1 = 1`;
   if (ram) {
-    correlatedSql += " AND ram = ?";
-    parametri.push(Number(req.query.ram));
+    correlatedSql += " AND ram LIKE ?";
+    parametri.push(`%${req.query.ram}%`);
   }
   if (gpu) {
     correlatedSql += " AND gpu LIKE ?";
