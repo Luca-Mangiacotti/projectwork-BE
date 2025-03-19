@@ -205,4 +205,51 @@ const searchByTitle = (req, res) => {
   });
 };
 
-module.exports = { index, show, showByTag, showByCorrelated, searchByTitle };
+//UPDATE QUANTITY
+const updateQuantity = (req, res) => {
+  const { title } = req.params;
+  const { quantity } = req.body;
+
+  if (!quantity) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "Quantity is required",
+    });
+  }
+
+  const sql = `
+    UPDATE products 
+    SET quantity = quantity - ?
+    WHERE title = ?
+  `;
+
+  connection.execute(sql, [quantity, title], (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        error: "Query Error",
+        message: err.message || "Unknown database error",
+        code: err.code,
+      });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({
+        error: "Not Found",
+        message: "Product not found",
+      });
+    }
+
+    res.json({
+      message: "Quantity updated successfully",
+    });
+  });
+};
+
+module.exports = {
+  index,
+  show,
+  showByTag,
+  showByCorrelated,
+  searchByTitle,
+  updateQuantity,
+};

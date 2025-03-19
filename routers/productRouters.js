@@ -19,4 +19,7 @@ router.get("/brand/:tag_name", productController.showByTag);
 //Show
 router.get("/:title", productController.show);
 
+//Update Quantity
+router.put("/update_quantity/:title", productController.updateQuantity);
+
 module.exports = router;
