@@ -207,7 +207,7 @@ const searchByTitle = (req, res) => {
 
 //UPDATE QUANTITY
 const updateQuantity = (req, res) => {
-  const { title } = req.params;
+  const { title } = req.body;
   const { quantity } = req.body;
 
   if (!quantity) {

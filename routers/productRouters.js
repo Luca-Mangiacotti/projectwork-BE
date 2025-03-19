@@ -20,6 +20,6 @@ router.get("/brand/:tag_name", productController.showByTag);
 router.get("/:title", productController.show);
 
 //Update Quantity
-router.put("/update_quantity/:title", productController.updateQuantity);
+router.put("/update_quantity", productController.updateQuantity);
 
 module.exports = router;
