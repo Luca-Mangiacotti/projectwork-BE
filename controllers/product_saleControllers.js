@@ -1,28 +1,17 @@
 //connettiamo il database
 const connection = require("../data/db");
 
-//CREATE SALE
-const createRecept = (req, res) => {
-  const {
-    id,
-    user_id,
-    user_email,
-    user_address,
-    data,
-    state,
-    discounted,
-    total,
-  } = req.body;
+//CREATE product_sale
+const create_prod_sale = (req, res) => {
+  const { sales_id, quantity, unitary_price, product_title, product_image } =
+    req.body;
   console.log(req.body);
   if (
-    !id ||
-    !user_id ||
-    !user_email ||
-    !user_address ||
-    !data ||
-    !state ||
-    !discounted ||
-    !total
+    !sales_id ||
+    !quantity ||
+    !unitary_price ||
+    !product_title ||
+    !product_image
   ) {
     return res.status(400).json({
       error: "Bad Request",
@@ -31,14 +20,15 @@ const createRecept = (req, res) => {
   }
 
   const sql = `
-      INSERT INTO sales (id, user_id, user_email, user_address, data, state, discounted, total)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO product_sales (sales_id, quantity, unitary_price, product_title, product_image)
+      VALUES (?, ?, ?, ?, ?)
     `;
 
   connection.execute(
     sql,
-    [id, user_id, user_email, user_address, data, state, discounted, total],
-    (err, results) => {
+    [sales_id, quantity, unitary_price, product_title, product_image],
+    (err, result) => {
+      // Changed 'res' to 'result' to avoid conflict with response object
       if (err) {
         console.error("Database Error:", err); // debug per l'eventuale errore
         return res.status(500).json({
@@ -49,10 +39,10 @@ const createRecept = (req, res) => {
       }
 
       res.status(201).json({
-        message: "Recept created successfully",
+        message: "product_sale created successfully",
       });
     }
   );
 };
 
-module.exports = { createRecept };
+module.exports = { create_prod_sale };
