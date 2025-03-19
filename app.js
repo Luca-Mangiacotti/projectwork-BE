@@ -7,6 +7,7 @@ const errorsHandler = require("./middlewares/errorsHandler");
 const productRouters = require("./routers/productRouters");
 const userRouters = require("./routers/userRouters");
 const saleRouters = require("./routers/saleRouters");
+const prod_sale_Routers = require("./routers/product_saleRouters");
 
 const app = express();
 const { PORT, FE_URL } = process.env;
@@ -27,6 +28,7 @@ app.use(
 app.use("/yuno", productRouters);
 app.use("/user", userRouters);
 app.use("/sale", saleRouters);
+app.use("/prod_sale", prod_sale_Routers);
 
 //gestione degli errori
 app.use(notFound);
