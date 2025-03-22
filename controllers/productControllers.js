@@ -121,7 +121,7 @@ const showByTag = ({ params }, res) => {
 // SHOW BY CORRELATED
 const showByCorrelated = (req, res) => {
   //recuperiamo l'id
-  const { ram, cpu, gpu } = req.query; // ----------------------------------------------------------------< quando pronto al FE
+  const { ram, category } = req.query; // ----------------------------------------------------------------< quando pronto al FE
 
   const parametri = [];
   let correlatedSql = `
@@ -132,13 +132,9 @@ const showByCorrelated = (req, res) => {
     correlatedSql += " AND ram LIKE ?";
     parametri.push(`%${req.query.ram}%`);
   }
-  if (gpu) {
-    correlatedSql += " AND gpu LIKE ?";
-    parametri.push(`%${req.query.gpu}%`);
-  }
-  if (cpu) {
-    correlatedSql += " AND cpu LIKE ?";
-    parametri.push(`%${req.query.cpu}%`);
+  if (category) {
+    correlatedSql += " AND category LIKE ?";
+    parametri.push(`%${req.query.category}%`);
   }
 
   //mandiamo la query che comprende il parametro [] per il contenuto richiesto
